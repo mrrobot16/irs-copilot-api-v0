@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 import os
 
-from db.models_example import ModelName
+from db.health_model import EnumNet
 from db.database import database
 
 app_health_get = APIRouter()
@@ -53,8 +53,8 @@ async def read_user_item_required(item_id: str, needy: str):
     return item
 
 @app_health_get.get("/models/{model_name}")
-async def get_model(model_name: ModelName):
-    if model_name is ModelName.alexnet:
+async def get_model(model_name: EnumNet):
+    if model_name is EnumNet.alexnet:
         return {"model_name": model_name, "message": "Deep Learning FTW!"}
 
     if model_name.value == "lenet":

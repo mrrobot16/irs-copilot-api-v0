@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from db.models_example import Item
+from db.health_model import Item
 
 app_health_put = APIRouter()
 
