@@ -45,11 +45,34 @@ async def update_item(
     return results
 
 @app_health_put.put("/items6/{item_id}")
-async def update_item(item_id: int, item: Annotated[HealthItemModel, Body(embed=True)]):
+async def update_item(item_id: int, item: Annotated[HealthItemModel, Body(embed=True, examples=[
+                {
+                    "name": "Foo Bar",
+                    "description": "A very nice Item223223",
+                    "price": 100.2,
+                    "tax": 10.2,
+                }
+            ])]):
+    results = {"item_id": item_id, "item": item}
+    return results
+examples=[
+    {
+        "name": "Foo",
+        "description": "A very nice Item example",
+        "price": 35.4,
+        "tax": 3.2,
+    },
+    {
+        "name": "Bar",
+        "price": "35.4",
+    },
+    {
+        "name": "Baz",
+        "price": "thirty five point four",
+    },
+]
+@app_health_put.put("/items7/{item_id}")
+async def update_item7(item_id: int, item: Annotated[HealthItemModel, Body(embed=True, examples=examples)]):
     results = {"item_id": item_id, "item": item}
     return results
 
-@app_health_put.put("/items7/{item_id}")
-async def update_item7(item_id: int, item: Annotated[HealthItemModel, Body(embed=True)]):
-    results = {"item_id": item_id, "item": item}
-    return results

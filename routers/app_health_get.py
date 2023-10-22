@@ -18,21 +18,21 @@ async def read_item(skip: int = 0, limit: int = 10):
     return database[skip : skip + limit]
 
 @app_health_get.get("/items2/")
-async def read_items2(q: str = Query(default="rick", max_length=50, min_length=3, regex="^fixedquery$")):
+async def read_items(q: str = Query(default="rick", max_length=50, min_length=3, regex="^fixedquery$")):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
         results.update({"q": q})
     return results
 
 @app_health_get.get("/items3/")
-async def read_items3(q: Annotated[str | None, Query(max_length=50)] = None):
+async def read_items(q: Annotated[str | None, Query(max_length=50)] = None):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
         results.update({"q": q})
     return results
 
 @app_health_get.get("/items4/")
-async def read_items4(q: Annotated[list[str] | None, Query(deprecated=True)] = ["foo", "bar"]):
+async def read_items(q: Annotated[list[str] | None, Query(deprecated=True)] = ["foo", "bar"]):
     query_items = {"q": q}
     return query_items
 
@@ -54,7 +54,7 @@ async def get_item(item_id: int, q: str | None = None, short: bool = False):
     return item
 
 @app_health_get.get("/items2/{item_id}")
-async def read_items2(
+async def read_items(
     item_id: Annotated[int, Path(title="The ID of the item to get")],
     q: Annotated[str | None, Query(alias="item-query")] = None,
 ):
@@ -64,7 +64,7 @@ async def read_items2(
     return results
 
 @app_health_get.get("/items3/{item_id}")
-async def read_items3(
+async def read_items(
     q: str, item_id: Annotated[int, Path(title="The ID of the item to get")]
 ):
     results = {"item_id": item_id}
