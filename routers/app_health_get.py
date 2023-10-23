@@ -1,11 +1,24 @@
-from fastapi import APIRouter, HTTPException, Query, Path
+from fastapi import APIRouter, HTTPException, Query, Path, Cookie, Header, Response
+from fastapi.responses import JSONResponse, RedirectResponse
 from typing import Annotated
 import os
 
-from db.health_model import HealthEnum
+from pyparsing import Any
+
+from db.health_model import HealthEnum, HealthItemModel
 from db.database import database
 
 app_health_get = APIRouter()
+
+@app_health_get.get("/portal")
+async def get_portal(teleport: bool = False) -> Response:
+    if teleport:
+        return RedirectResponse(url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    return JSONResponse(content={"message": "Here's your interdimensional portal."})
+
+@app_health_get.get("/teleport")
+async def get_teleport() -> RedirectResponse:
+    return RedirectResponse(url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
 @app_health_get.get("/")
 async def health():
@@ -35,6 +48,28 @@ async def read_items(q: Annotated[str | None, Query(max_length=50)] = None):
 async def read_items(q: Annotated[list[str] | None, Query(deprecated=True)] = ["foo", "bar"]):
     query_items = {"q": q}
     return query_items
+
+@app_health_get.get("/items-returns/", response_model=list[HealthItemModel])
+async def read_items() -> Any:
+    return [
+        {"name": "Portal Gun", "price": 42.0},
+        {"name": "Plumbus", "price": 32.0},
+    ]
+
+
+@app_health_get.get("/items-cookie/")
+async def read_items(ads_id: Annotated[str | None, Cookie()] = None):
+    return {"ads_id": ads_id}
+
+@app_health_get.get("/items-header/")
+async def read_items(
+    strange_header: Annotated[str | None, Header(convert_underscores=False)] = None
+):
+    return {"strange_header": strange_header}
+
+@app_health_get.get("/items-xtokens/")
+async def read_items(x_token: Annotated[list[str] | None, Header()] = None):
+    return {"X-Token values": x_token}
 
 @app_health_get.get("/items/me")
 async def get_my_items():

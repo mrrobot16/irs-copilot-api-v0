@@ -1,8 +1,13 @@
+from typing import Any
 from fastapi import APIRouter
 
-from db.health_model import HealthItemModel, HealthOfferModel, HealthImageModel
+from db.health_model import HealthItemModel, HealthOfferModel, HealthImageModel, HealthUserInModel, HealthUserModel
 
 app_health_post = APIRouter()
+
+@app_health_post.post("/user/", response_model=HealthUserModel)
+async def create_user(user: HealthUserInModel) -> Any:
+    return user
 
 @app_health_post.post("/items/")
 async def create_item(item: HealthItemModel):
@@ -15,11 +20,15 @@ async def create_item(item_id: int, item: HealthItemModel):
 
 @app_health_post.post("/items/")
 async def create_item(item: HealthItemModel):
-    item_dict = item.dict()
+    item_dict = item.model_dump()
     if item.tax:
         price_with_tax = item.price + item.tax
         item_dict.update({"price_with_tax": price_with_tax})
     return item_dict
+
+@app_health_post.post("/items-return/", response_model=HealthItemModel)
+async def create_item(item: HealthItemModel) -> HealthItemModel:
+    return item
 
 @app_health_post.post("/offers/")
 async def create_offer(offer: HealthOfferModel):
