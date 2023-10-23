@@ -6,19 +6,19 @@ import os
 from pyparsing import Any
 
 from db.health_model import HealthEnum, HealthItemModel
-from db.database import database
+from db.database import database, items
 
 app_health_get = APIRouter()
 
 @app_health_get.get("/portal")
 async def get_portal(teleport: bool = False) -> Response:
     if teleport:
-        return RedirectResponse(url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        return RedirectResponse(url="http://www.youtube.com/watch?v=dQw4w9WgXcQ")
     return JSONResponse(content={"message": "Here's your interdimensional portal."})
 
 @app_health_get.get("/teleport")
 async def get_teleport() -> RedirectResponse:
-    return RedirectResponse(url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    return RedirectResponse(url="http://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
 @app_health_get.get("/")
 async def health():
@@ -29,6 +29,22 @@ async def health():
 @app_health_get.get("/items/")
 async def read_item(skip: int = 0, limit: int = 10):
     return database[skip : skip + limit]
+
+@app_health_get.get(
+    "/items/{item_id}/name",
+    response_model=HealthItemModel,
+    response_model_include={"name", "description"},
+)
+async def read_item_name(item_id: str):
+    return items[item_id]
+
+@app_health_get.get("/items1/{item_id}", response_model=HealthItemModel, response_model_exclude_unset=True)
+async def read_item(item_id: str):
+    return items[item_id]
+
+@app_health_get.get("/items/{item_id}/public", response_model=HealthItemModel, response_model_exclude={"tax", "images"})
+async def read_item_public_data(item_id: str):
+    return items[item_id]
 
 @app_health_get.get("/items2/")
 async def read_items(q: str = Query(default="rick", max_length=50, min_length=3, regex="^fixedquery$")):
