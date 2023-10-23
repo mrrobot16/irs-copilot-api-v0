@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, EmailStr
 from enum import Enum
 
 class HealthEnum(str, Enum):
@@ -46,3 +46,7 @@ class HealthOfferModel(BaseModel):
 class HealthUserModel(BaseModel):
     username: str
     full_name: str | None = None
+    email: EmailStr
+
+class HealthUserInModel(BaseModel):
+    password: str
