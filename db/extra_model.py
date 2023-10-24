@@ -14,21 +14,19 @@ class PlaneItem(BaseItem):
     size: int
 
 
-class UserIn(BaseModel):
+class UserBase(BaseModel):
     username: str
+    email: EmailStr
+    full_name: str | None = None
+
+
+class UserIn(UserBase):
     password: str
-    email: EmailStr
-    full_name: str | None = None
 
 
-class UserOut(BaseModel):
-    username: str
-    email: EmailStr
-    full_name: str | None = None
+class UserOut(UserBase):
+    pass
 
 
-class UserInDB(BaseModel):
-    username: str
+class UserInDB(UserBase):
     hashed_password: str
-    email: EmailStr
-    full_name: str | None = None
