@@ -5,7 +5,7 @@ import os
 
 from pyparsing import Any
 
-from db.health_model import HealthEnum, HealthItemModel
+from db.health_model import HealthEnum, HealthItemModel, HealthTags
 from db.database import database, items
 
 app_health_get = APIRouter()
@@ -168,3 +168,17 @@ async def read_file(file_path: str):
         # If the file does not exist, return a 404 error
         raise HTTPException(status_code=404, detail="File not found")
 
+
+
+@app_health_get.get("/items/enum2", tags=[HealthTags.items])
+async def get_items():
+    return ["Portal gun", "Plumbus"]
+
+
+@app_health_get.get("/users/enum", tags=[HealthTags.users])
+async def read_users():
+    return ["Rick", "Morty"]
+
+@app_health_get.get("/elements/", tags=["items"], deprecated=True)
+async def read_elements():
+    return [{"item_id": "Foo"}]

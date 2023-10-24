@@ -1,6 +1,10 @@
 from pydantic import BaseModel, Field, HttpUrl, EmailStr
 from enum import Enum
 
+class HealthTags(Enum):
+    items = "items"
+    users = "users"
+
 class HealthEnum(str, Enum):
     alexnet = "alexnet"
     resnet = "resnet"
@@ -19,7 +23,8 @@ class HealthItemModel(BaseModel):
     price: float = Field(gt=0, description="The price must be greater than zero")
     tax: float | None = None
     is_offer: bool | None = None
-    tags: list[str] = []
+    # tags: list[str] = []
+    tags: set[str] = set()
     images: list[HealthImageModel] | None = None
 
     model_config = {

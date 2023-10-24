@@ -9,8 +9,8 @@ from routers.app_error_handling import app_error_handling_router
 
 def configure_routes(app: FastAPI):
     app.include_router(app_error_handling_router, prefix="/error-handling", tags=["Error Handling"])    
-    # app.include_router(app_form_data_router, prefix="/form-data", tags=["Form Data"])
-    # app.include_router(app_extra_router, prefix="/extra", tags=["Extra"])
-    # app.include_router(app_health_get, prefix="/health-get", tags=["Health GET"])
-    # app.include_router(app_health_put, prefix="/health-put", tags=["Health PUT"])
-    # app.include_router(app_health_post, prefix="/health-post", tags=["Health POST"])
+    app.include_router(app_form_data_router, prefix="/form-data", tags=["Form Data"])
+    app.include_router(app_extra_router, prefix="/extra", tags=["Extra"])
+    app.include_router(app_health_get, prefix="/health-get", tags=["Health GET"])
+    app.include_router(app_health_put, prefix="/health-put", tags=["Health PUT"])
+    app.include_router(app_health_post, prefix="/health-post", tags=["Health POST"])
