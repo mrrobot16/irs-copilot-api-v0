@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, Path, Cookie, Header, Response
+from fastapi import APIRouter, HTTPException, Query, Path, Cookie, Header, Response, Depends
 from fastapi.responses import JSONResponse, RedirectResponse
 from typing import Annotated
 import os
@@ -6,9 +6,53 @@ import os
 from pyparsing import Any
 
 from db.health_model import HealthEnum, HealthItemModel, HealthTags
-from db.database import database, items
+from db.database import database, items, fake_items_db
+from services import CommonQueryParams, CommonsDep, CommonQPs, query_or_default, query_or_cookie_extractor
 
 app_health_get = APIRouter()
+
+@app_health_get.get("/items/")
+async def read_items(commons: CommonsDep):
+    return commons
+
+@app_health_get.get("/users/")
+async def read_users(commons: CommonsDep):
+    return commons
+
+
+@app_health_get.get("/items/")
+async def read_items(commons: Annotated[CommonQueryParams, Depends(CommonQueryParams)]):
+    response = {}
+    if commons.q:
+        response.update({"q": commons.q})
+    items = fake_items_db[commons.skip : commons.skip + commons.limit]
+    response.update({"items": items})
+    return response
+
+@app_health_get.get("/items-deps/")
+async def read_items(commons: Annotated[CommonQueryParams, Depends()]):
+    response = {}
+    if commons.q:
+        response.update({"q": commons.q})
+    items = fake_items_db[commons.skip : commons.skip + commons.limit]
+    response.update({"items": items})
+    return response
+
+@app_health_get.get("/items-deps-1/")
+async def read_items(commons: CommonQPs):
+    response = {}
+    if commons.q:
+        response.update({"q": commons.q})
+    items = fake_items_db[commons.skip : commons.skip + commons.limit]
+    response.update({"items": items})
+    return response
+
+@app_health_get.get("/items-deps-2/")
+async def read_query(
+    query_or_default: query_or_default
+):  
+    return {"q_or_cookie": query_or_default}
+
 
 @app_health_get.get("/portal")
 async def get_portal(teleport: bool = False) -> Response:
