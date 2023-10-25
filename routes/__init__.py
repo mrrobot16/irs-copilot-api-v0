@@ -6,8 +6,10 @@ from routers.app_health_post import app_health_post
 from routers.app_extra_router import app_extra_router
 from routers.app_form_data import app_form_data_router
 from routers.app_error_handling import app_error_handling_router
+from routers.app_dependency_injection import app_dependency_injection
 
 def configure_routes(app: FastAPI):
+    app.include_router(app_dependency_injection, prefix="/dependency-injection", tags=["Dependency Injection"])
     app.include_router(app_error_handling_router, prefix="/error-handling", tags=["Error Handling"])    
     app.include_router(app_form_data_router, prefix="/form-data", tags=["Form Data"])
     app.include_router(app_extra_router, prefix="/extra", tags=["Extra"])
