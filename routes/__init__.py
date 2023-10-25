@@ -7,10 +7,10 @@ from routers.app_extra_router import app_extra_router
 from routers.app_form_data import app_form_data_router
 from routers.app_error_handling import app_error_handling_router
 from routers.app_dependency_injection import app_dependency_injection
-from routers.app_security import app_securiy
+from routers.app_security import app_security
 
 def configure_routes(app: FastAPI):
-    app.include_router(app_securiy, prefix="/auth", tags=["Auth"])
+    app.include_router(app_security, prefix="/auth", tags=["Auth"])
     # app.include_router(app_dependency_injection, prefix="/dependency-injection", tags=["Dependency Injection"])
     # app.include_router(app_error_handling_router, prefix="/error-handling", tags=["Error Handling"])    
     # app.include_router(app_form_data_router, prefix="/form-data", tags=["Form Data"])
