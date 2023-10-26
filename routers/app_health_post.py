@@ -14,12 +14,12 @@ async def create_item(item: HealthItemModel):
     return item
 
 @app_health_post.post("/items2/{item_id}")
-async def create_item(item_id: int, item: HealthItemModel):
+async def create_item1(item_id: int, item: HealthItemModel):
     return {"item_id": item_id, **item.model_dump()}
 
 
 @app_health_post.post("/items/")
-async def create_item(item: HealthItemModel):
+async def create_item2(item: HealthItemModel):
     item_dict = item.model_dump()
     if item.tax:
         price_with_tax = item.price + item.tax
@@ -27,7 +27,7 @@ async def create_item(item: HealthItemModel):
     return item_dict
 
 @app_health_post.post("/items-return/", response_model=HealthItemModel)
-async def create_item(item: HealthItemModel) -> HealthItemModel:
+async def create_item3(item: HealthItemModel) -> HealthItemModel:
     return item
 
 @app_health_post.post("/offers/")
@@ -44,7 +44,7 @@ async def create_multiple_images(images: list[HealthImageModel]):
     summary="Create an item",
     response_description="The created item"
 )
-async def create_item(item: HealthItemModel):
+async def create_item4(item: HealthItemModel):
     # NOTE: Below those comments will appear in swagger.
     """
     Create an item with all the information:

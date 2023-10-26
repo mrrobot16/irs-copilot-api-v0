@@ -12,7 +12,7 @@ from services import CommonQueryParams, CommonsDep, CommonQPs, query_or_default,
 app_health_get = APIRouter()
 
 @app_health_get.get("/items/")
-async def read_items(commons: CommonsDep):
+async def read_items_1(commons: CommonsDep):
     return commons
 
 @app_health_get.get("/users/")
@@ -21,7 +21,7 @@ async def read_users(commons: CommonsDep):
 
 
 @app_health_get.get("/items/")
-async def read_items(commons: Annotated[CommonQueryParams, Depends(CommonQueryParams)]):
+async def read_items_2(commons: Annotated[CommonQueryParams, Depends(CommonQueryParams)]):
     response = {}
     if commons.q:
         response.update({"q": commons.q})
@@ -30,7 +30,7 @@ async def read_items(commons: Annotated[CommonQueryParams, Depends(CommonQueryPa
     return response
 
 @app_health_get.get("/items-deps/")
-async def read_items(commons: Annotated[CommonQueryParams, Depends()]):
+async def read_items_3(commons: Annotated[CommonQueryParams, Depends()]):
     response = {}
     if commons.q:
         response.update({"q": commons.q})
@@ -39,7 +39,7 @@ async def read_items(commons: Annotated[CommonQueryParams, Depends()]):
     return response
 
 @app_health_get.get("/items-deps-1/")
-async def read_items(commons: CommonQPs):
+async def read_items_3(commons: CommonQPs):
     response = {}
     if commons.q:
         response.update({"q": commons.q})
@@ -83,7 +83,7 @@ async def read_item_name(item_id: str):
     return items[item_id]
 
 @app_health_get.get("/items1/{item_id}", response_model=HealthItemModel, response_model_exclude_unset=True)
-async def read_item(item_id: str):
+async def read_item1(item_id: str):
     return items[item_id]
 
 @app_health_get.get("/items/{item_id}/public", response_model=HealthItemModel, response_model_exclude={"tax", "images"})
@@ -91,26 +91,26 @@ async def read_item_public_data(item_id: str):
     return items[item_id]
 
 @app_health_get.get("/items2/")
-async def read_items(q: str = Query(default="rick", max_length=50, min_length=3, regex="^fixedquery$")):
+async def read_items_4(q: str = Query(default="rick", max_length=50, min_length=3, regex="^fixedquery$")):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
         results.update({"q": q})
     return results
 
 @app_health_get.get("/items3/")
-async def read_items(q: Annotated[str | None, Query(max_length=50)] = None):
+async def read_items_5(q: Annotated[str | None, Query(max_length=50)] = None):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
         results.update({"q": q})
     return results
 
 @app_health_get.get("/items4/")
-async def read_items(q: Annotated[list[str] | None, Query(deprecated=True)] = ["foo", "bar"]):
+async def read_items_6(q: Annotated[list[str] | None, Query(deprecated=True)] = ["foo", "bar"]):
     query_items = {"q": q}
     return query_items
 
 @app_health_get.get("/items-returns/", response_model=list[HealthItemModel])
-async def read_items() -> Any:
+async def read_items_7() -> Any:
     return [
         {"name": "Portal Gun", "price": 42.0},
         {"name": "Plumbus", "price": 32.0},
@@ -118,17 +118,17 @@ async def read_items() -> Any:
 
 
 @app_health_get.get("/items-cookie/")
-async def read_items(ads_id: Annotated[str | None, Cookie()] = None):
+async def read_items_8(ads_id: Annotated[str | None, Cookie()] = None):
     return {"ads_id": ads_id}
 
 @app_health_get.get("/items-header/")
-async def read_items(
+async def read_items_9(
     strange_header: Annotated[str | None, Header(convert_underscores=False)] = None
 ):
     return {"strange_header": strange_header}
 
 @app_health_get.get("/items-xtokens/")
-async def read_items(x_token: Annotated[list[str] | None, Header()] = None):
+async def read_items_10(x_token: Annotated[list[str] | None, Header()] = None):
     return {"X-Token values": x_token}
 
 @app_health_get.get("/items/me")
@@ -149,7 +149,7 @@ async def get_item(item_id: int, q: str | None = None, short: bool = False):
     return item
 
 @app_health_get.get("/items2/{item_id}")
-async def read_items(
+async def read_items_11(
     item_id: Annotated[int, Path(title="The ID of the item to get")],
     q: Annotated[str | None, Query(alias="item-query")] = None,
 ):
@@ -159,7 +159,7 @@ async def read_items(
     return results
 
 @app_health_get.get("/items3/{item_id}")
-async def read_items(
+async def read_items_12(
     q: str, item_id: Annotated[int, Path(title="The ID of the item to get")]
 ):
     results = {"item_id": item_id}
