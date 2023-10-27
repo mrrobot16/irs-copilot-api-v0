@@ -8,6 +8,7 @@
         "deploy": "git push heroku dev:master",
         "logs":"heroku logs --tail",
         "sql": "cd sql_app && yarn dev",
-        "big_app": "cd big_app && yarn dev"
+        "big_app": "cd big_app && yarn dev",
+        "task_app": "cd task_app && yarn dev"
     }
 }
