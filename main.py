@@ -6,6 +6,7 @@ from routes import configure_routes
 from routes.auth import configure_auth_routes
 from error_handlers import configure_error_handlers
 from middleware import configure_middleware
+from static import configure_static_files
 from metadata import metadata
 from services import verify_token, verify_key
 
@@ -28,12 +29,7 @@ app = FastAPI(
 async def health():
     return {"status": status.HTTP_200_OK}
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-@app.get("/web")
-async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "title": "FastAPI Tutorial Home Page"})
-
+configure_static_files(app)
 configure_error_handlers(app)
 configure_middleware(app)
 configure_auth_routes(app)
