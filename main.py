@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Depends, status
+from fastapi import FastAPI, Depends, status, Request
+from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
 from routes import configure_routes
@@ -26,6 +27,12 @@ app = FastAPI(
 @app.get("/")
 async def health():
     return {"status": status.HTTP_200_OK}
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+@app.get("/web")
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "title": "FastAPI Tutorial Home Page"})
 
 configure_error_handlers(app)
 configure_middleware(app)
