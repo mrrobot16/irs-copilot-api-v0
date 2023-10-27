@@ -15,12 +15,12 @@ app_health_get = APIRouter()
 async def read_items_1(commons: CommonsDep):
     return commons
 
-@app_health_get.get("/users/")
+@app_health_get.get("/users/", tags = ["users"])
 async def read_users(commons: CommonsDep):
     return commons
 
 
-@app_health_get.get("/items/")
+@app_health_get.get("/items/", tags = ["items"])
 async def read_items_2(commons: Annotated[CommonQueryParams, Depends(CommonQueryParams)]):
     response = {}
     if commons.q:
@@ -39,7 +39,7 @@ async def read_items_3(commons: Annotated[CommonQueryParams, Depends()]):
     return response
 
 @app_health_get.get("/items-deps-1/")
-async def read_items_3(commons: CommonQPs):
+async def read_items_13(commons: CommonQPs):
     response = {}
     if commons.q:
         response.update({"q": commons.q})
